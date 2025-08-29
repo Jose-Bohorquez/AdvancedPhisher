@@ -61,6 +61,16 @@ chmod +x install.sh
 ./install.sh
 ```
 
+#### Termux (Android):
+```bash
+git clone https://github.com/tu-usuario/AdvancedPhisher.git
+cd AdvancedPhisher
+chmod +x install_termux.sh
+./install_termux.sh
+```
+
+> **Nota para Termux:** Si experimentas errores de compilación con `cryptography` o `netifaces`, usa el instalador específico para Termux que incluye dependencias optimizadas. Ver [TERMUX_GUIDE.md](TERMUX_GUIDE.md) para más detalles.
+
 ### Instalación Manual
 
 Si prefieres instalar manualmente:
@@ -188,3 +198,59 @@ AdvancedPhisher/
 ├── deployments/           # Paquetes de deployment
 └── docs/                  # Documentación adicional
 ```
+
+## 📚 Documentación
+
+- [Guía para Estudiantes](GUIA_ESTUDIANTES.md) - Tutorial completo paso a paso
+- [Guía de Termux/Android](TERMUX_GUIDE.md) - Instalación y uso en dispositivos móviles
+- [Guía de Uso Ético](docs/ethical_usage_guide.md)
+- [Manual de Usuario](docs/user_manual.md)
+- [Referencia de API](docs/api_reference.md)
+- [Guía de Desarrollo](docs/development_guide.md)
+
+## 🚨 Solución de Problemas Comunes
+
+### Error de Compilación en Termux/Android
+**Problema:** `cryptography compilation failed` o `Rust not found`
+
+**Solución:**
+```bash
+# Usar instalador específico para Termux
+./install_termux.sh
+
+# O instalar dependencias optimizadas manualmente
+pip install -r requirements_termux.txt
+```
+
+### Puerto ya en uso
+**Problema:** `Address already in use`
+
+**Solución:**
+```bash
+# Cambiar puerto
+python main.py --port 8081
+
+# O matar procesos existentes (Linux/macOS)
+lsof -ti:8080 | xargs kill -9
+
+# Windows
+netstat -ano | findstr :8080
+taskkill /PID <PID> /F
+```
+
+### Módulos no encontrados
+**Problema:** `ModuleNotFoundError`
+
+**Solución:**
+```bash
+# Verificar entorno virtual
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate     # Windows
+
+# Reinstalar dependencias
+pip install -r requirements.txt
+```
+
+Para más problemas específicos, consulta:
+- [TERMUX_GUIDE.md](TERMUX_GUIDE.md) - Problemas en Android
+- [GUIA_ESTUDIANTES.md](GUIA_ESTUDIANTES.md) - Soluciones generales

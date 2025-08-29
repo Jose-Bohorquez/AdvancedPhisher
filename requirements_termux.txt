@@ -1,0 +1,97 @@
+# Requirements optimizados para Termux/Android
+# Versión simplificada sin dependencias que requieren compilación de Rust
+
+# Framework web básico
+Flask==2.3.3
+Werkzeug==2.3.7
+Jinja2==3.1.2
+MarkupSafe==2.1.3
+click==8.1.7
+itsdangerous==2.1.2
+
+# Utilidades de red (sin cryptography pesada)
+requests==2.31.0
+urllib3==2.0.7
+certifi==2023.7.22
+charset-normalizer==3.3.0
+idna==3.4
+
+# Manejo de datos
+pandas==2.1.1
+numpy==1.24.4
+
+# Visualización (versiones ligeras)
+matplotlib==3.7.2
+seaborn==0.12.2
+pillow==10.0.1
+
+# Utilidades del sistema
+colorama==0.4.6
+termcolor==2.3.0
+psutil==5.9.5
+
+# Manejo de archivos
+openpyxl==3.1.2
+
+# Fecha y tiempo
+python-dateutil==2.8.2
+pytz==2023.3
+
+# Logging mejorado
+loguru==0.7.2
+
+# Validación de datos
+validators==0.22.0
+
+# Utilidades de texto
+fuzzy==1.2.2
+
+# Cliente HTTP alternativo (más ligero que requests avanzado)
+httpx==0.25.0
+
+# Manejo de JSON
+orjson==3.9.7
+
+# Utilidades de sistema de archivos
+watchdog==3.0.0
+
+# Generación de reportes
+reportlab==4.0.4
+
+# Manejo de configuración
+pyyaml==6.0.1
+toml==0.10.2
+
+# Utilidades de red básicas (sin netifaces que puede dar problemas)
+# Se reemplaza con alternativas más simples
+ifaddr==0.2.0
+
+# Criptografía básica (sin Rust)
+pycryptodome==3.19.0
+
+# Utilidades de tiempo
+timeago==1.0.16
+
+# Manejo de User-Agents
+fake-useragent==1.4.0
+
+# Utilidades de red IP
+ipaddress==1.0.23
+
+# Generación de QR (opcional)
+qrcode==7.4.2
+
+# Utilidades de hash
+hashlib-compat==1.0.1
+
+# Manejo de procesos
+subprocess32==3.5.4; python_version < '3.2'
+
+# Utilidades de string
+unidecode==1.3.7
+
+# Manejo de archivos temporales
+tempfile-compat==1.0.0
+
+# Utilidades de sistema
+platform-compat==1.0.0
