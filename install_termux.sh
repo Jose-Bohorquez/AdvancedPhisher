@@ -116,33 +116,67 @@ else
 fi
 echo
 
-print_step "[6/8] Instalando dependencias optimizadas para Termux..."
-echo "    Usando requirements_termux.txt (sin dependencias problemáticas)..."
-echo "    Esto puede tomar 10-15 minutos..."
+print_step "[6/8] Instalando dependencias ultra-optimizadas para Termux..."
+echo "    Usando requirements_termux.txt (versión minimalista sin compilación nativa)..."
+echo "    Esto puede tomar 5-10 minutos..."
+
+# Función para instalar dependencias con reintentos
+install_with_retry() {
+    local package="$1"
+    local max_attempts=3
+    local attempt=1
+    
+    while [ $attempt -le $max_attempts ]; do
+        print_info "Intento $attempt/$max_attempts: Instalando $package"
+        pip install "$package" --no-cache-dir
+        if [ $? -eq 0 ]; then
+            print_success "$package instalado correctamente"
+            return 0
+        else
+            print_warning "Fallo en intento $attempt para $package"
+            attempt=$((attempt + 1))
+            sleep 2
+        fi
+    done
+    
+    print_error "No se pudo instalar $package después de $max_attempts intentos"
+    return 1
+}
 
 if [ -f "requirements_termux.txt" ]; then
-    pip install -r requirements_termux.txt
-    if [ $? -eq 0 ]; then
-        print_success "Dependencias optimizadas instaladas correctamente"
-    else
-        print_warning "Algunas dependencias fallaron, intentando instalación básica..."
-        # Instalación mínima de emergencia
-        pip install flask requests pandas matplotlib colorama
-        if [ $? -eq 0 ]; then
-            print_success "Instalación básica completada"
-        else
-            print_error "Error en instalación básica"
-            print_info "Verifique su conexión a internet"
-            exit 1
+    print_info "Instalando dependencias una por una para mejor control de errores..."
+    
+    # Instalar dependencias críticas primero
+    CRITICAL_DEPS=("Flask==2.3.3" "requests==2.31.0" "colorama==0.4.6" "pyyaml==6.0.1" "fake-useragent==1.4.0")
+    
+    failed_packages=()
+    
+    for dep in "${CRITICAL_DEPS[@]}"; do
+        if ! install_with_retry "$dep"; then
+            failed_packages+=("$dep")
         fi
+    done
+    
+    # Intentar instalación completa del archivo
+    print_info "Instalando dependencias restantes desde requirements_termux.txt..."
+    pip install -r requirements_termux.txt --no-cache-dir 2>/dev/null
+    
+    if [ ${#failed_packages[@]} -eq 0 ]; then
+        print_success "Todas las dependencias críticas instaladas correctamente"
+    else
+        print_warning "Algunas dependencias fallaron: ${failed_packages[*]}"
+        print_info "El sistema puede funcionar con funcionalidad limitada"
     fi
+    
 else
-    print_warning "requirements_termux.txt no encontrado, usando requirements.txt estándar..."
-    pip install -r requirements.txt
-    if [ $? -ne 0 ]; then
-        print_error "Error con requirements.txt estándar"
-        print_info "Algunas dependencias pueden no ser compatibles con Termux"
-    fi
+    print_error "requirements_termux.txt no encontrado"
+    print_info "Instalando dependencias mínimas de emergencia..."
+    
+    # Instalación de emergencia ultra-básica
+    EMERGENCY_DEPS=("flask" "requests" "colorama")
+    for dep in "${EMERGENCY_DEPS[@]}"; do
+        install_with_retry "$dep"
+    done
 fi
 echo
 
@@ -216,13 +250,23 @@ else
     echo "❌ pip no encontrado"
 fi
 
-# Verificar módulos críticos
-echo "📦 Verificando módulos Python:"
-for module in flask requests pandas matplotlib colorama; do
+# Verificar módulos críticos (versión ultra-ligera)
+echo "📦 Verificando módulos Python críticos:"
+for module in flask requests colorama yaml; do
     if python -c "import $module" 2>/dev/null; then
         echo "  ✅ $module"
     else
         echo "  ❌ $module (faltante)"
+    fi
+done
+
+# Verificar módulos opcionales
+echo "📦 Verificando módulos opcionales:"
+for module in fake_useragent; do
+    if python -c "import $module" 2>/dev/null; then
+        echo "  ✅ $module (opcional)"
+    else
+        echo "  ⚠️  $module (opcional, faltante)"
     fi
 done
 

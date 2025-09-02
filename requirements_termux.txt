@@ -1,7 +1,8 @@
-# Requirements optimizados para Termux/Android
-# Versión simplificada sin dependencias que requieren compilación de Rust
+# Requirements ultra-optimizados para Termux/Android
+# Versión minimalista sin dependencias que requieren compilación nativa
+# Eliminadas: pandas, numpy, matplotlib, seaborn, pillow (requieren ninja/compilación)
 
-# Framework web básico
+# Framework web básico - CORE ESENCIAL
 Flask==2.3.3
 Werkzeug==2.3.7
 Jinja2==3.1.2
@@ -9,89 +10,81 @@ MarkupSafe==2.1.3
 click==8.1.7
 itsdangerous==2.1.2
 
-# Utilidades de red (sin cryptography pesada)
+# Utilidades de red - CORE ESENCIAL
 requests==2.31.0
 urllib3==2.0.7
 certifi==2023.7.22
 charset-normalizer==3.3.0
 idna==3.4
 
-# Manejo de datos
-pandas==2.1.1
-numpy==1.24.4
-
-# Visualización (versiones ligeras)
-matplotlib==3.7.2
-seaborn==0.12.2
-pillow==10.0.1
-
-# Utilidades del sistema
+# Utilidades del sistema - LIGERAS
 colorama==0.4.6
 termcolor==2.3.0
-psutil==5.9.5
+# psutil==5.9.5  # REMOVIDO: puede causar problemas de compilación
 
-# Manejo de archivos
-openpyxl==3.1.2
-
-# Fecha y tiempo
+# Fecha y tiempo - ESENCIALES
 python-dateutil==2.8.2
 pytz==2023.3
 
-# Logging mejorado
-loguru==0.7.2
+# Logging básico (sin loguru que puede ser problemático)
+# loguru==0.7.2  # REMOVIDO: usar logging estándar de Python
 
-# Validación de datos
+# Validación de datos - LIGERA
 validators==0.22.0
 
-# Utilidades de texto
-fuzzy==1.2.2
+# Cliente HTTP básico (solo requests, sin httpx)
+# httpx==0.25.0  # REMOVIDO: requests es suficiente
 
-# Cliente HTTP alternativo (más ligero que requests avanzado)
-httpx==0.25.0
+# Manejo de JSON - BÁSICO (usar json estándar)
+# orjson==3.9.7  # REMOVIDO: usar json estándar de Python
 
-# Manejo de JSON
-orjson==3.9.7
+# Utilidades de sistema de archivos - BÁSICAS
+# watchdog==3.0.0  # REMOVIDO: no esencial para funcionalidad básica
 
-# Utilidades de sistema de archivos
-watchdog==3.0.0
+# Generación de reportes - REMOVIDO
+# reportlab==4.0.4  # REMOVIDO: requiere compilación, usar alternativas simples
 
-# Generación de reportes
-reportlab==4.0.4
-
-# Manejo de configuración
+# Manejo de configuración - ESENCIAL
 pyyaml==6.0.1
-toml==0.10.2
+# toml==0.10.2  # REMOVIDO: no esencial
 
-# Utilidades de red básicas (sin netifaces que puede dar problemas)
-# Se reemplaza con alternativas más simples
-ifaddr==0.2.0
+# Utilidades de red básicas - LIGERAS
+# ifaddr==0.2.0  # REMOVIDO: usar alternativas más simples
 
-# Criptografía básica (sin Rust)
-pycryptodome==3.19.0
+# Criptografía básica - REMOVIDO
+# pycryptodome==3.19.0  # REMOVIDO: puede causar problemas, usar hashlib estándar
 
-# Utilidades de tiempo
-timeago==1.0.16
+# Utilidades de tiempo - LIGERAS
+# timeago==1.0.16  # REMOVIDO: usar datetime estándar
 
-# Manejo de User-Agents
+# Manejo de User-Agents - ESENCIAL
 fake-useragent==1.4.0
 
-# Utilidades de red IP
-ipaddress==1.0.23
+# Utilidades de red IP - USAR ESTÁNDAR
+# ipaddress==1.0.23  # REMOVIDO: usar ipaddress estándar de Python
 
-# Generación de QR (opcional)
-qrcode==7.4.2
+# Generación de QR - REMOVIDO
+# qrcode==7.4.2  # REMOVIDO: no esencial para funcionalidad básica
 
-# Utilidades de hash
-hashlib-compat==1.0.1
+# Utilidades de hash - USAR ESTÁNDAR
+# hashlib-compat==1.0.1  # REMOVIDO: usar hashlib estándar
 
-# Manejo de procesos
-subprocess32==3.5.4; python_version < '3.2'
+# Manejo de procesos - USAR ESTÁNDAR
+# subprocess32==3.5.4; python_version < '3.2'  # REMOVIDO: usar subprocess estándar
 
-# Utilidades de string
-unidecode==1.3.7
+# Utilidades de string - LIGERAS
+# unidecode==1.3.7  # REMOVIDO: no esencial
 
-# Manejo de archivos temporales
-tempfile-compat==1.0.0
+# Manejo de archivos temporales - USAR ESTÁNDAR
+# tempfile-compat==1.0.0  # REMOVIDO: usar tempfile estándar
 
-# Utilidades de sistema
-platform-compat==1.0.0
+# Utilidades de sistema - USAR ESTÁNDAR
+# platform-compat==1.0.0  # REMOVIDO: usar platform estándar
+
+# ============================================
+# RESUMEN DE DEPENDENCIAS ULTRA-LIGERAS:
+# - Solo Flask y utilidades web esenciales
+# - Sin pandas, numpy, matplotlib (compilación nativa)
+# - Sin librerías de criptografía pesadas
+# - Máxima compatibilidad con Termux/Android
+# ============================================
