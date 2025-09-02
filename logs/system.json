@@ -1,0 +1,12 @@
+[
+  {
+    "timestamp": "2025-09-01T22:43:38.387347",
+    "event_type": "APPLICATION_START",
+    "description": "AdvancedPhisher iniciado",
+    "data": {
+      "version": "1.0.0",
+      "python_version": "3.13.2 (tags/v3.13.2:4f8bb39, Feb  4 2025, 15:23:48) [MSC v.1942 64 bit (AMD64)]",
+      "platform": "win32"
+    }
+  }
+]
